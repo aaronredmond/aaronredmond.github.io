@@ -3,10 +3,72 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Aaron Redmond – personal website and small tools.">
+  <meta name="color-scheme" content="light dark">
   <title>Aaron Redmond</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Hi, I'm Aaron</h1>
-  <p>Welcome to my personal page.</p>
+  <header class="site-header">
+    <a class="brand" href="#top">Aaron Redmond</a>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#tools">Tools</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <p class="eyebrow">Hello, world 👋</p>
+      <h1>Hi, I'm Aaron.</h1>
+      <p class="lead">
+        I'm a software engineer.
+        I build things for the web and tinker with small tools on the side.
+      </p>
+      <p class="links">
+        <a class="button" href="#tools">See my tools</a>
+        <a class="button ghost" href="#contact">Get in touch</a>
+      </p>
+    </section>
+
+    <section id="about">
+      <h2>About</h2>
+      <p>
+        Blah, blah, blah.
+      </p>
+    </section>
+
+    <section id="tools">
+      <h2>Tools</h2>
+      <p class="muted">Small, simple things I've built. Everything runs in your browser.</p>
+      <div class="cards">
+        <a class="card" href="photo-to-pixel/">
+          <h3>PhotoToPixel</h3>
+          <p>
+            Turn any photo into retro pixel art. Pick a console palette
+            (NES, Game Boy, C64…), add dithering, ASCII mode or a CRT effect,
+            and download a PNG.
+          </p>
+          <span class="tags">React · Canvas · Vite</span>
+        </a>
+        <!-- Add more tools by copying the card above -->
+      </div>
+    </section>
+
+    <section id="contact">
+      <h2>Contact</h2>
+      <ul class="contact-list">
+        <li><a href="https://github.com/aaronredmond">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/aaron-redmond-47b76a3a">LinkedIn</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; <span id="year">2026</span> Aaron Redmond</p>
+  </footer>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>
