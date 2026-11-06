@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Text Extractor — Screenshot OCR</title>
+  <!-- Tesseract.js OCR engine (runs entirely in your browser, no server).
+       Version is pinned and verified with an SRI hash so a changed CDN file won't load. -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"
+          integrity="sha384-GJqSu7vueQ9qN0E9yLPb3Wtpd7OrgK8KmYzC8T1IysG1bcvxvIO4qtYR/D3A991F"
+          crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>📝 Text Extractor</h1>
+    <p>Extract text from any screenshot — recognition runs in your browser, your image is never uploaded.</p>
+  </header>
+
+  <div class="container">
+    <!-- Controls: pick the OCR language (passed straight to Tesseract as its lang code) -->
+    <div class="controls">
+      <label class="lang">
+        Language:
+        <select id="lang">
+          <option value="eng" selected>English</option>
+          <option value="deu">German</option>
+          <option value="fra">French</option>
+          <option value="spa">Spanish</option>
+          <option value="ita">Italian</option>
+          <option value="por">Portuguese</option>
+          <option value="nld">Dutch</option>
+          <option value="eng+deu">English + German</option>
+        </select>
+      </label>
+      <label class="lang">
+        Layout:
+        <select id="layout">
+          <option value="6" selected>Code / single block</option>
+          <option value="3">Document (auto columns)</option>
+          <option value="4">Single column</option>
+        </select>
+      </label>
+      <label class="lang" title="Upscales small images, converts to grayscale, flips dark themes to dark-on-light and stretches contrast. Greatly improves accuracy on screenshots.">
+        <input type="checkbox" id="enhance" checked />
+        Enhance image (recommended)
+      </label>
+    </div>
+
+    <!-- Dropzone: the single entry point for images. Click opens the hidden file
+         input; it also accepts drag & drop and (via a window paste listener) clipboard
+         screenshots. tabindex="0" makes it keyboard-focusable for accessibility. -->
+    <div class="dropzone" id="dropzone" tabindex="0">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+        <polyline points="17 8 12 3 7 8" />
+        <line x1="12" y1="3" x2="12" y2="15" />
+      </svg>
+      <div>
+        <strong>Click to upload</strong>, drag &amp; drop, or <strong>paste</strong> (Ctrl/Cmd+V) a screenshot
+      </div>
+      <span class="hint">PNG, JPG, WebP, GIF — your image stays on your device</span>
+      <input type="file" id="fileInput" accept="image/*" hidden />
+    </div>
+
+    <!-- Preview: hidden until an image is chosen, then shows a thumbnail of it -->
+    <div class="preview-wrap" id="previewWrap">
+      <img class="preview" id="preview" alt="Selected image preview" />
+    </div>
+
+    <!-- Progress: hidden until OCR starts; the bar fills 0->100% during recognition -->
+    <div class="progress" id="progress">
+      <div class="bar"><div id="barFill"></div></div>
+      <div class="status" id="status" role="status" aria-live="polite">Starting…</div>
+    </div>
+
+    <!-- Result: hidden until OCR finishes; holds the editable text plus its actions -->
+    <div class="result-wrap" id="resultWrap">
+      <div class="result-head">
+        <h2>Extracted text</h2>
+        <div class="btn-row">
+          <button class="ghost" id="clearBtn">Clear</button>
+          <button class="ghost" id="downloadBtn">Download .txt</button>
+          <button id="copyBtn">Copy</button>
+        </div>
+      </div>
+      <textarea id="output" placeholder="Recognized text will appear here…" spellcheck="false"></textarea>
+      <p class="note">
+        <strong>Heads up:</strong> OCR isn't perfect — please proofread the result. Punctuation and
+        markup symbols are the weakest spot: pairs like <code>**bold**</code> are often misread as
+        letters (e.g. <code>sk</code> or <code>*k</code>), and similar-looking characters
+        (<code>l</code>/<code>1</code>/<code>I</code>, <code>O</code>/<code>0</code>) can be swapped.
+        Small, low-contrast or stylised text works less well.
+      </p>
+    </div>
+  </div>
+
+  <footer>
+    Powered by <a href="https://github.com/naptha/tesseract.js" target="_blank" rel="noopener">Tesseract.js</a> · OCR runs locally; the engine and language data are downloaded once from a CDN
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
