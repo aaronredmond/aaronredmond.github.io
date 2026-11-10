@@ -123,3 +123,12 @@ footer {
 }
 
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* Cards that hold two links: the title link stretches over the whole card,
+   and the Source link sits above it so both stay clickable. */
+div.card { position: relative; }
+.card-link { color: inherit; text-decoration: none; }
+.card-link::after { content: ""; position: absolute; inset: 0; border-radius: .75rem; }
+.card-link:focus-visible { outline: none; }
+.card-link:focus-visible::after { outline: 2px solid var(--accent); outline-offset: 3px; }
+.source { position: relative; z-index: 1; display: inline-block; margin-left: .6rem; font-size: .8rem; color: var(--muted); }
