@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Random Wheel</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="panel wheel-panel">
+    <div class="wheel-wrap">
+      <div class="pointer" aria-hidden="true"></div>
+      <canvas id="wheel" width="1600" height="1600" role="img" aria-label="Wheel"></canvas>
+    </div>
+    <button id="spin">Spin!</button>
+    <div class="hint">or press the Space bar</div>
+    <div id="result" role="status" aria-live="polite" aria-atomic="true"></div>
+
+    <div class="history" id="historyBox" hidden>
+      <div class="history-head"><span>Recent spins</span><button class="small" id="clearHistory">Clear</button></div>
+      <ul id="history" aria-label="Recent spin results"></ul>
+    </div>
+  </main>
+
+  <canvas id="confetti" aria-hidden="true"></canvas>
+
+  <button id="toggleSettings" aria-controls="settings" aria-expanded="true" aria-label="Hide settings" title="Hide settings">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+    </svg>
+  </button>
+
+  <aside class="panel config" id="settings">
+    <h2>Settings</h2>
+    <fieldset id="cfg">
+
+      <section class="group">
+        <h3>Wheel</h3>
+        <div class="seg" role="radiogroup" aria-label="Wheel type">
+          <label><input type="radio" name="mode" value="list" checked> Custom list</label>
+          <label><input type="radio" name="mode" value="range"> Number range</label>
+        </div>
+        <div data-mode="range">
+          <div class="field"><label for="min">Minimum</label><input type="number" id="min" value="1"></div>
+          <div class="field"><label for="max">Maximum</label><input type="number" id="max" value="100"></div>
+          <p class="note" id="rangeNote"></p>
+        </div>
+      </section>
+
+      <section class="group" data-mode="list">
+        <h3>Spokes</h3>
+        <div class="field"><label for="count">Number of spokes</label><input type="number" id="count" min="1" max="50" value="8"></div>
+        <label class="field"><span>Weighted spokes<small>Bigger slice = more likely to win</small></span><input type="checkbox" id="weighted"></label>
+        <div id="items"></div>
+        <div id="removedInfo" hidden></div>
+        <div class="actions">
+          <button class="small" id="numbers">Fill with 1…N</button>
+        </div>
+        <details>
+          <summary>Paste a list</summary>
+          <textarea id="paste" placeholder="One item per line" aria-label="Items to paste, one per line"></textarea>
+          <button class="small" id="applyPaste">Replace spokes</button>
+        </details>
+      </section>
+
+      <section class="group">
+        <details class="collapse">
+          <summary>Options</summary>
+          <label class="field"><span>Remove winner after each spin<small>Winner leaves the wheel on the next spin</small></span><input type="checkbox" id="removeWinner"></label>
+          <label class="field"><span>Sound effects</span><input type="checkbox" id="sound" checked></label>
+          <label class="field"><span>Show recent spins</span><input type="checkbox" id="showHistory" checked></label>
+        </details>
+      </section>
+
+      <section class="group">
+        <details class="collapse">
+          <summary>Appearance</summary>
+          <div class="field"><label for="wheelSize">Wheel size</label>
+            <select id="wheelSize">
+              <option value="360">Small</option>
+              <option value="460">Medium</option>
+              <option value="600">Large</option>
+              <option value="760">Extra large</option>
+              <option value="fit">Fit screen</option>
+            </select>
+          </div>
+          <div class="field"><label for="palette">Colour scheme</label>
+            <select id="palette">
+              <option value="rainbow">Rainbow</option>
+              <option value="pastel">Pastel</option>
+              <option value="ocean">Ocean</option>
+              <option value="sunset">Sunset</option>
+              <option value="forest">Forest</option>
+            </select>
+          </div>
+          <div class="field" data-mode="list"><span>Hand-picked colours<small>Clear them to follow the scheme</small></span>
+            <button class="small" id="resetColors">Clear</button>
+          </div>
+        </details>
+      </section>
+
+      <section class="group">
+        <div class="field"><span>Reset everything<small>Back to the default wheel and settings</small></span>
+          <button class="small" id="resetAll">Reset</button>
+        </div>
+      </section>
+
+    </fieldset>
+  </aside>
+
+<script src="script.js"></script>
+</body>
+</html>
