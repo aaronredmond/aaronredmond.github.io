@@ -131,4 +131,6 @@ div.card { position: relative; }
 .card-link::after { content: ""; position: absolute; inset: 0; border-radius: .75rem; }
 .card-link:focus-visible { outline: none; }
 .card-link:focus-visible::after { outline: 2px solid var(--accent); outline-offset: 3px; }
-.source { position: relative; z-index: 1; display: inline-block; margin-left: .6rem; font-size: .8rem; color: var(--muted); }
+.card .card-meta { margin: 0; font-size: .8rem; line-height: 1.5; color: var(--muted); }
+.card-meta .tags { font-size: inherit; }
+.source { position: relative; z-index: 1; font-size: inherit; color: var(--muted); }
